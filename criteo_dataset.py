@@ -37,7 +37,9 @@ class CriteoDataset:
             line = self.line_buffer.pop()
 
         block_impression_id = utils.extract_impression_id(line, True)
-        cost, propensity = utils.extract_cost_propensity(line)
+
+        if not self.isTest:
+            cost, propensity = utils.extract_cost_propensity(line)
 
         candidate_features = [utils.extract_features(line, self.debug)]
 
@@ -54,6 +56,12 @@ class CriteoDataset:
                 self.line_buffer.append(line)
                 break
 
+        _response = {}
+        _response["id"] = block_impression_id
+        _response["candidates"] = candidate_features
+        if not self.isTest:
+            _response["cost"] = cost
+            _response["propensity"] = propensity
         return  {
                     "id": block_impression_id ,
                     "cost": cost,

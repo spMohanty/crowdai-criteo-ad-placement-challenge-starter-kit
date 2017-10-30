@@ -8,6 +8,17 @@ Starter kit for the [Criteo Ad Placement Challenge](https://www.crowdai.org/chal
 
 # Usage
 
+```
+from criteo_dataset import CriteoDataset
+
+# Instantiate a CriteoDataset object by passing the path to the relevant file
+train = CriteoDataset("../cntk_train_small.txt", isTest=False)
+
+# Iterate over the impression blocks
+for _impression in train:
+    print(_impression)
+```
+
 # Getting Started
 
 #  Author
