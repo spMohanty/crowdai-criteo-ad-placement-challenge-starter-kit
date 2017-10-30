@@ -43,3 +43,5 @@ for _impression in train:
           ]
         }
     """
+
+train.close()
