@@ -4,6 +4,7 @@
 Starter kit for the [Criteo Ad Placement Challenge](https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge) on [CrowdAI](https://www.crowdai.org/).
 
 # About
+To-Be-Added
 
 # Installation
 
@@ -84,9 +85,6 @@ for _impression in train:
         }
     """
 ```
-
-# About
-To-Be-Added
 
 #  Author
 S.P. Mohanty <sharada.mohanty@epfl.ch>
