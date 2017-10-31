@@ -6,13 +6,7 @@ import copy
 def extract_impression_id(line, assert_first_line=False):
     """
         Extracts the impression_id from a line
-
-        params:
-            assert_first_line: `boolean`
-                a conditionals to assert if the line is indeed the first line of an impression block
     """
-    if assert_first_line:
-        assert len(line.split("|")) == 4
     return line[:line.index("|")].strip()
 
 def extract_cost_propensity(line):

@@ -53,7 +53,7 @@ class CriteoDataset:
         else:
             line = self.line_buffer.pop()
 
-        block_impression_id = utils.extract_impression_id(line, True)
+        block_impression_id = utils.extract_impression_id(line)
         if self.id_map:
             block_impression_id = self.id_map(block_impression_id)
 
@@ -84,12 +84,7 @@ class CriteoDataset:
         if not self.isTest:
             _response["cost"] = cost
             _response["propensity"] = propensity
-        return  {
-                    "id": block_impression_id ,
-                    "cost": cost,
-                    "propensity": propensity,
-                    "candidates": candidate_features
-                }
+        return  _response
 
     def close(self):
         self.__del__()
