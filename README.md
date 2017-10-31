@@ -18,6 +18,8 @@ pip install --upgrade crowdai
 # Your First Submission
 ```
 cd criteo_starter_kit
+virtualenv venv
+source venv/bin/activate
 pip install -r requirements.txt
 python generate_random_predictions.py > data/predictions.txt
 python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY>
