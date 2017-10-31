@@ -14,14 +14,17 @@ pip install --upgrade crowdai
 
 # Your First Submission
 ```
-# First run the script below to generate a random prediction file
-# python generate_random_prediction.py > data/predictions.txt
-
+cd criteo_starter_kit
+python generate_random_predictions.py > data/predictions.txt
+python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY>
+```
+# Submission Script
+```
 import crowdai
 api_key  = "YOUR-CROWDAI-API-KEY"
 challenge = crowdai.Challenge("CriteoAdPlacementNIPS2017", api_key)
 
-scores = challenge.submit("../CriteoAdPlacementChallenge_job_factory/data/predictions.txt")
+scores = challenge.submit("data/predictions.txt")
 print scores
 """
 {
@@ -37,8 +40,17 @@ print scores
 }
 """
 ```
+The response is a python dictionary, hence the individual scoring metrics can be accessed simply by :
 
-# Usage
+```
+scores['ips']
+scores['ips_std']
+scores['snips']
+scores['snips_std']
+```
+and so on.
+
+# Parser
 
 ```
 from criteo_dataset import CriteoDataset
@@ -74,7 +86,7 @@ for _impression in train:
 ```
 
 # About
-
+To-Be-Added
 
 #  Author
 S.P. Mohanty <sharada.mohanty@epfl.ch>
