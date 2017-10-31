@@ -4,7 +4,7 @@ import utils
 import hashlib
 
 class CriteoDataset:
-    def __init__(self, filepath, isTest=False, salt=False, debug=False):
+    def __init__(self, filepath, isTest=False, salt=False, id_map=False, debug=False):
         self.fp = open(filepath, "r")
         self.debug = debug
         self.isTest = isTest
@@ -12,7 +12,6 @@ class CriteoDataset:
             `isTest` is a boolean value which signals that this file does not
             have `cost` and `propensity` information available for any impressions
         """
-        self.line_buffer = []
         self.salt = salt
         """
             if a `salt` is provided, then the action
@@ -22,6 +21,17 @@ class CriteoDataset:
             the index with which it is to be swapped is decided by computing an integral hash
             from the string version of the id of the impression_block.
         """
+
+        self.id_map = id_map
+        """
+            id_map is an optional function which can be used to transform the `impression_id` to another value
+            a simple example could be :
+            ```
+            def _f(x):
+                return x+"_postfix"
+            ```
+        """
+        self.line_buffer = []
 
     def __iter__(self):
         return self
@@ -54,6 +64,8 @@ class CriteoDataset:
             line = self.line_buffer.pop()
 
         block_impression_id = utils.extract_impression_id(line, True)
+        if self.id_map:
+            block_impression_id = self.id_map(block_impression_id)
 
         if not self.isTest:
             cost, propensity = utils.extract_cost_propensity(line)
