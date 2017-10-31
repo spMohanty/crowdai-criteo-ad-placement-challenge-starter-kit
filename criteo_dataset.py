@@ -4,7 +4,7 @@ import utils
 import hashlib
 
 class CriteoDataset:
-    def __init__(self, filepath, isTest=False, salt=False, id_map=False, debug=False):
+    def __init__(self, filepath, isTest=False, id_map=False, debug=False):
         self.fp = open(filepath, "r")
         self.debug = debug
         self.isTest = isTest
@@ -12,16 +12,6 @@ class CriteoDataset:
             `isTest` is a boolean value which signals that this file does not
             have `cost` and `propensity` information available for any impressions
         """
-        self.salt = salt
-        """
-            if a `salt` is provided, then the action
-            at the first index of an impression_block (one that is selected by the
-            logger policy) should be swapped with another index of the impression_block
-
-            the index with which it is to be swapped is decided by computing an integral hash
-            from the string version of the id of the impression_block.
-        """
-
         self.id_map = id_map
         """
             id_map is an optional function which can be used to transform the `impression_id` to another value
@@ -88,13 +78,6 @@ class CriteoDataset:
             else:
                 candidate_features.append(utils.extract_features(line, debug=self.debug))
 
-        if self.salt:
-            # Compute a deterministic number (deterministic based on a salt) in [0, L)
-            # where `L` is the number of candidates
-            target_index = self.compute_integral_hash(S=str(block_impression_id) , modulo=len(candidate_features))
-            # swap the first element with the element at the target_index
-            candidate_features[0], candidate_features[target_index] = candidate_features[target_index], candidate_features[0]
-
         _response = {}
         _response["id"] = block_impression_id
         _response["candidates"] = candidate_features
@@ -107,13 +90,6 @@ class CriteoDataset:
                     "propensity": propensity,
                     "candidates": candidate_features
                 }
-
-    def compute_integral_hash(self,S, modulo):
-        S = str(S)
-        S += self.salt
-        md5 = hashlib.md5(S).hexdigest()
-        _ords = [ord(c) for c in md5]
-        return (sum(_ords)**7) % modulo
 
     def close(self):
         self.__del__()

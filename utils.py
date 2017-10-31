@@ -1,6 +1,7 @@
 from __future__ import print_function
 import hashlib
 import numpy as np
+import copy
 
 def extract_impression_id(line, assert_first_line=False):
     """
@@ -70,3 +71,10 @@ def dump_impression(_impression, test_mode=False, debug=False):
         lines.append(_line)
 
     return "\n".join(lines)
+
+def compute_integral_hash(S, salt, modulo):
+    S = str(S)
+    S += salt
+    md5 = hashlib.md5(S).hexdigest()
+    _ords = [ord(c) for c in md5]
+    return (sum(_ords)**7) % modulo
