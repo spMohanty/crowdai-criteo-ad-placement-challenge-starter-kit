@@ -13,9 +13,12 @@ git clone https://github.com/spMohanty/crowdai-criteo-ad-placement-challenge-sta
 pip install --upgrade crowdai
 ```
 
+**NOTE** : Please ensure that you have at least version `1.0.8` of `crowdai`
+
 # Your First Submission
 ```
 cd criteo_starter_kit
+pip install -r requirements.txt
 python generate_random_predictions.py > data/predictions.txt
 python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY>
 ```
