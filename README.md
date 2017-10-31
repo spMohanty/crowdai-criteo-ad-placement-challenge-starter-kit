@@ -26,12 +26,13 @@ python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY>
 ```
 # Submission Script
 ```
+from __future__ import print_function
 import crowdai
 api_key  = "YOUR-CROWDAI-API-KEY"
 challenge = crowdai.Challenge("CriteoAdPlacementNIPS2017", api_key)
 
 scores = challenge.submit("data/predictions.txt")
-print scores
+print(scores)
 """
 {
   "impwt_std": 0.00064745289554913,

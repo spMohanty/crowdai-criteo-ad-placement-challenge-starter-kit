@@ -47,6 +47,9 @@ class CriteoPrediction:
         except StopIteration:
             raise StopIteration
 
+    def __next__(self):
+        return self.next()
+
     def close(self):
         self.__del__()
 

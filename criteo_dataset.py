@@ -19,6 +19,8 @@ class CriteoDataset:
         else:
             raise StopIteration
 
+    def __next__(self):
+        return self.next()
 
     def get_next_line(self):
         try:

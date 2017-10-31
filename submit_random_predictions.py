@@ -1,6 +1,6 @@
 # Remember to generate the random predictions by running inside the repository
 # python generate_random_prediction.py > data/predictions.txt
-
+from __future__ import print_function
 import crowdai
 import argparse
 
@@ -11,7 +11,7 @@ args = parser.parse_args()
 challenge = crowdai.Challenge("CriteoAdPlacementNIPS2017", args.api_key)
 
 scores = challenge.submit("./data/predictions.txt")
-print scores
+print(scores)
 """
 {
   "impwt_std": 0.00064745289554913,
