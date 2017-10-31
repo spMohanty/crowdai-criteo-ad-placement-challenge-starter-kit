@@ -78,6 +78,8 @@ class CriteoDataset:
                 break
 
             line_impression_id = utils.extract_impression_id(line)
+            if self.id_map:
+                line_impression_id = self.id_map(line_impression_id)
 
             if line_impression_id != block_impression_id:
                 # Save the line in the line_buffer
