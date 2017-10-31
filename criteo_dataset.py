@@ -1,13 +1,27 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import utils
+import hashlib
 
 class CriteoDataset:
-    def __init__(self, filepath, isTest=False, debug=False):
+    def __init__(self, filepath, isTest=False, salt=False, debug=False):
         self.fp = open(filepath, "r")
         self.debug = debug
         self.isTest = isTest
+        """
+            `isTest` is a boolean value which signals that this file does not
+            have `cost` and `propensity` information available for any impressions
+        """
         self.line_buffer = []
+        self.salt = salt
+        """
+            if a `salt` is provided, then the action
+            at the first index of an impression_block (one that is selected by the
+            logger policy) should be swapped with another index of the impression_block
+
+            the index with which it is to be swapped is decided by computing an integral hash
+            from the string version of the id of the impression_block.
+        """
 
     def __iter__(self):
         return self
@@ -24,13 +38,14 @@ class CriteoDataset:
 
     def get_next_line(self):
         try:
-            return self.fp.readline()
+            line = self.fp.readline()
+            return line
         except StopIteration:
             return False
 
     def get_next_impression_block(self):
-        current_position = self.fp.tell()
         # Obtain the first line of an impression block
+        assert len(self.line_buffer) <= 1
         if len(self.line_buffer) == 0:
             line = self.get_next_line()
             if not line:
@@ -51,12 +66,20 @@ class CriteoDataset:
                 break
 
             line_impression_id = utils.extract_impression_id(line)
-            candidate_features.append(utils.extract_features(line, debug=self.debug))
 
             if line_impression_id != block_impression_id:
                 # Save the line in the line_buffer
                 self.line_buffer.append(line)
                 break
+            else:
+                candidate_features.append(utils.extract_features(line, debug=self.debug))
+
+        if self.salt:
+            # Compute a deterministic number (deterministic based on a salt) in [0, L)
+            # where `L` is the number of candidates
+            target_index = self.compute_integral_hash(S=str(block_impression_id) , modulo=len(candidate_features))
+            # swap the first element with the element at the target_index
+            candidate_features[0], candidate_features[target_index] = candidate_features[target_index], candidate_features[0]
 
         _response = {}
         _response["id"] = block_impression_id
@@ -70,6 +93,13 @@ class CriteoDataset:
                     "propensity": propensity,
                     "candidates": candidate_features
                 }
+
+    def compute_integral_hash(self,S, modulo):
+        S = str(S)
+        S += self.salt
+        md5 = hashlib.md5(S).hexdigest()
+        _ords = [ord(c) for c in md5]
+        return (sum(_ords)**7) % modulo
 
     def close(self):
         self.__del__()
