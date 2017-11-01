@@ -3,7 +3,7 @@ from __future__ import print_function
 from criteo_dataset import CriteoDataset
 import numpy as np
 
-GOLD_LABEL_PATH = "data/cntk_small.txt.gz"
+GOLD_LABEL_PATH = "data/criteo_small.txt.gz"
 
 data = CriteoDataset(GOLD_LABEL_PATH)
 
