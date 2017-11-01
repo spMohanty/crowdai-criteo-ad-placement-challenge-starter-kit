@@ -6,11 +6,12 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Submit the result to crowdAI')
 parser.add_argument('--api_key', dest='api_key', action='store', required=True)
+parser.add_argument('--pred_path', dest='predictions', action='store', required=True)
 args = parser.parse_args()
 
 challenge = crowdai.Challenge("CriteoAdPlacementNIPS2017", args.api_key)
 
-scores = challenge.submit("./data/predictions.txt")
+scores = challenge.submit(args.predictions)
 print(scores)
 """
 {

@@ -22,7 +22,7 @@ virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
 python generate_random_predictions.py > data/predictions.txt
-python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY>
+python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY> --predictions=data/predictions.txt
 ```
 # Submission Script
 ```
@@ -63,7 +63,7 @@ and so on.
 from criteo_dataset import CriteoDataset
 
 # Instantiate a CriteoDataset object by passing the path to the relevant file
-train = CriteoDataset("data/cntk_small.txt", isTest=False)
+train = CriteoDataset("data/cntk_small.txt.gz", isTest=False)
 
 # Iterate over the impression blocks
 for _impression in train:
