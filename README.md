@@ -21,8 +21,8 @@ cd criteo_starter_kit
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python generate_random_predictions.py > data/predictions.txt
-python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY> --predictions=data/predictions.txt
+python python generate_random_predictions.py --test_set data/criteo_small.txt.gz --output_path=predictions.gz
+python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY> --predictions=predictions.gz
 ```
 # Submission Script
 ```
@@ -31,7 +31,7 @@ import crowdai
 api_key  = "YOUR-CROWDAI-API-KEY"
 challenge = crowdai.Challenge("CriteoAdPlacementNIPS2017", api_key)
 
-scores = challenge.submit("data/predictions.txt")
+scores = challenge.submit("predictions.gz")
 print(scores)
 """
 {
