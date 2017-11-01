@@ -2,11 +2,15 @@ from __future__ import print_function
 import utils
 from itertools import (takewhile,repeat)
 import numpy as np
+import gzip
 
 class CriteoPrediction:
     def __init__(self, filepath, debug=False):
         self.debug = debug
-        self.fp = open(filepath)
+        if filepath.endswith(".gz"):
+            self.fp = gzip.open(filepath, "rb")
+        else:
+            self.fp = open(filepath, "rb")
         self.count_max_instances()
 
     def count_max_instances(self):

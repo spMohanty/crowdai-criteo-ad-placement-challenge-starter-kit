@@ -2,10 +2,14 @@
 from __future__ import print_function
 import utils
 import hashlib
+import gzip
 
 class CriteoDataset:
     def __init__(self, filepath, isTest=False, id_map=False, debug=False):
-        self.fp = open(filepath, "r")
+        if filepath.endswith(".gz"):
+            self.fp = gzip.open(filepath, "rb")
+        else:
+            self.fp = open(filepath, "rb")
         self.debug = debug
         self.isTest = isTest
         """

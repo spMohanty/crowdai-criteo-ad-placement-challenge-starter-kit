@@ -21,7 +21,9 @@ def extract_cost_propensity(line):
     line_items = line.split("|")
     assert len(line_items) == 4
     cost = float(line_items[1].replace("l ","").strip())
-    propensity = np.float64(line_items[2].replace("p ","").strip())
+    #NOTE That the value after |p in the line is actually inverse propensity
+    # Hence, the need for the division by 1
+    propensity = 1.0/np.float64(line_items[2].replace("p ","").strip())
     return cost, propensity
 
 def extract_features(line, debug=False):

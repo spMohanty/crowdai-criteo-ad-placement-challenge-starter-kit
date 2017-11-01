@@ -4,7 +4,7 @@ import json
 
 from criteo_dataset import CriteoDataset
 
-train = CriteoDataset("../../cntk_train_small.txt", isTest=False)
+train = CriteoDataset("data/cntk_small.txt.gz", isTest=False)
 
 for _impression in train:
     print(_impression)
