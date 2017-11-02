@@ -21,8 +21,12 @@ cd criteo_starter_kit
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python python generate_random_predictions.py --test_set data/criteo_small.txt.gz --output_path=predictions.gz
-python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY> --predictions=predictions.gz
+"""
+* Download `criteo_test_release_small.txt.gz` from the CrowdAI datasets page of the challenge.
+* Save it in the `data/` folder.
+"""
+python python generate_random_predictions.py --test_set=data/criteo_test_release_small.txt.gz --output_path=data/predictions.gz
+python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY> --predictions=data/predictions.gz
 ```
 # Submission Script
 ```
