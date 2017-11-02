@@ -35,8 +35,17 @@ import crowdai
 api_key  = "YOUR-CROWDAI-API-KEY"
 challenge = crowdai.Challenge("CriteoAdPlacementNIPS2017", api_key)
 
-scores = challenge.submit("predictions.gz")
+scores = challenge.submit("predictions.gz", small_test=True)
+"""
+Arguments:
+* `small_test` : Boolean
+  ** Requests the grader to grader submission against the small test set (10000 impressions)
+  ** The computed score is not updated on the leaderboard
+
+NOTE: In case of the actual test set, please pass `small_test=False`  
+"""
 print(scores)
+
 """
 {
   "impwt_std": 0.00064745289554913,
@@ -66,8 +75,19 @@ and so on.
 ```
 from criteo_dataset import CriteoDataset
 
+"""
+ * Download `criteo_train_small.txt.gz` from the CrowdAI datasets page of the challenge.
+"""
+
 # Instantiate a CriteoDataset object by passing the path to the relevant file
-train = CriteoDataset("data/cntk_small.txt.gz", isTest=False)
+train = CriteoDataset("data/criteo_train_small.txt.gz", isTest=False)
+
+"""
+Arguments:
+* `isTest` : Boolean
+The `isTest` parameter is used to determine if its a test set (one which does not have cost/propensity information for every impression)
+Hence in case of the training data, `isTest` should be `False`.
+"""
 
 # Iterate over the impression blocks
 for _impression in train:

@@ -12,6 +12,10 @@ args = parser.parse_args()
 
 print("Reading test set from : ",args.test_set)
 data = CriteoDataset(args.test_set, isTest=True)
+"""
+The `isTest` parameter is used to determine if its a test set (one which does not have cost/propensity information for every impression)
+Hence in case of the training data, `isTest` should be `False`.
+"""
 
 output = gzip.open(args.output_path, "wb")
 
