@@ -5,8 +5,8 @@ import hashlib
 import gzip
 
 class CriteoDataset:
-    def __init__(self, filepath, isTest=False, id_map=False, debug=False):
-        if filepath.endswith(".gz"):
+    def __init__(self, filepath, isTest=False, gzip=False, id_map=False, debug=False):
+        if filepath.endswith(".gz") or gzip:
             self.fp = gzip.open(filepath, "rb")
         else:
             self.fp = open(filepath, "rb")

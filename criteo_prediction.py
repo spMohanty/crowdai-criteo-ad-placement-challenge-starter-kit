@@ -5,9 +5,9 @@ import numpy as np
 import gzip
 
 class CriteoPrediction:
-    def __init__(self, filepath, debug=False):
+    def __init__(self, filepath, gzip=False, debug=False):
         self.debug = debug
-        if filepath.endswith(".gz"):
+        if filepath.endswith(".gz") or gzip:
             self.fp = gzip.open(filepath, "rb")
         else:
             self.fp = open(filepath, "rb")
