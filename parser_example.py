@@ -4,7 +4,16 @@ import json
 
 from criteo_dataset import CriteoDataset
 
-train = CriteoDataset("data/cntk_small.txt.gz", isTest=False)
+train = CriteoDataset("../data/criteo_train_small.txt.gz")
+"""
+Arguments:
+* `isTest` : Boolean
+The `isTest` parameter is used to determine if its a test set (one which does not have cost/propensity information for every impression)
+Hence in case of the training data, `isTest` should be `False`.
+
+Ex:
+test = CriteoDataset("../data/criteo_test_small.txt.gz", isTest=True)
+"""
 
 for _impression in train:
     print(_impression)

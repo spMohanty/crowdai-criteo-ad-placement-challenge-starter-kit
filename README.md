@@ -41,6 +41,8 @@ Each `<user context-candidate product>` pair is described using **33 categorical
 These post-processed dataset files are available [ here ](https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge/dataset_files
 ).
 
+We have provided a simple parser for the dataset in this starter kit. A simple example can be found here in [parser_example.py](parser_example.py)
+
 # Evaluation
 
 Your task is to build a function `f` which takes `M` candidates, each represented by a `74000-dimensional vector`, and outputs scores for each of the candidates between 1 and M.
@@ -49,52 +51,38 @@ The reward for an individual impression is, did the selected candidate get click
 
 We will be using an unbiased estimate of the aggregate reward using inverse propensity scoring (see [ the companion paper ](http://www.cs.cornell.edu/~adith/Criteo/NIPS16_Benchmark.pdf) for details).
 
-
-# Parser
-
+The starter kit involves the final score computing function which is used by grader to evaluate submissions. You can score a prediction file by :
 ```
-from criteo_dataset import CriteoDataset
-
-"""
- * Download `criteo_train_small.txt.gz` from the CrowdAI datasets page of the challenge.
-"""
-
-# Instantiate a CriteoDataset object by passing the path to the relevant file
-train = CriteoDataset("data/criteo_train_small.txt.gz", isTest=False)
-
-"""
-Arguments:
-* `isTest` : Boolean
-The `isTest` parameter is used to determine if its a test set (one which does not have cost/propensity information for every impression)
-Hence in case of the training data, `isTest` should be `False`.
-"""
-
-# Iterate over the impression blocks
-for _impression in train:
-    print(_impression)
-    """
-        {
-          "propensity": 336.294857951,
-          "cost": 0.999,
-          "id": "68965824",
-          "candidates": [
-            {
-              0: 300,
-              1: 600,
-              2: 1,
-              .....
-              17: 1,
-              18: 1,
-              19: 1,
-              20: 1
-            },
-            ...
-            ...
-            ...
-          ]
-        }
-    """
+import compute_score
+compute_score.grade_predictions("<PATH_TO_YOUR_PREDICTIONS_FILE>", "<PATH_TO_THE_CORRESPONDING_GOLD_LABELS>", _debug=True)
 ```
+
+# Predictions
+
+The final predictions file that is to be submitted is a gzipped file, which contains one line each for each impression in the test set.
+And each of these lines should follow the following format :
+`impression_id`;`candidate_index_0`:`candidate_score_0`,`candidate_index_1`:`candidate_score_1`,`candidate_index_2`:`candidate_score_2`...and so on.
+
+An example line looks like follows:
+```
+896678244;0:5.2,1:4.81,2:4.87,3:3.90,4:8.68,5:2.8140,6:0.5032,7:7.4315,8:0.663,9:7.78398,10:1.4687811
+```
+We provide a parser for the prediction files, and it can be accessed [here](criteo_prediction.py).
+
+The grader only accepts gzipped version of the prediction file (even if the parser supports non gzipped version of the prediction file).
+
+[generate_random_predictions.py](generate_random_predictions.py) generates a sample prediction file as expected by the grader.
+
+# Dry Run Mode
+
+As the Test set is large, and the computation of the score takes a considerable amount of time, we have also provided smaller versions of the train and test sets for the participants to verify the grading pipeline.
+The files can be downloaded in the [datasets section](https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge/dataset_files) of the challenge page. And when submitting a solution, it can be submitted by passing the `small_test=True` parameter to `challenge.submit` function, as done in the [provided sample scripts](submit_random_predictions.py).
+
+These scores from these submissions (with `small_test=True`) will not be reflected on the leaderboard.
+
+# Contact:
+* Technical issues : [https://gitter.im/crowdAI/NIPS17-Criteo-Ad-Placement-Challenge](https://gitter.im/crowdAI/NIPS17-Criteo-Ad-Placement-Challenge)
+* Discussion Forum : [https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge/topics](https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge/topics)
 
 #  Author
 S.P. Mohanty <sharada.mohanty@epfl.ch>
