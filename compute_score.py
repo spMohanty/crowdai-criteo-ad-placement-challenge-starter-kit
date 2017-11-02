@@ -72,7 +72,7 @@ def grade_predictions(predictions_path, gold_labels_path, expected_number_of_pre
 
         logged_action_index = 0
         if salt_swap:
-            logged_action_index = criteo_utils.compute_integral_hash(_impression['id'], salt_swap, len(_impression["candidates"]))
+            logged_action_index = utils.compute_integral_hash(_impression['id'], salt_swap, len(_impression["candidates"]))
 
         score_logged_action = prob_scores[logged_action_index]
 

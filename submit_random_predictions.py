@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 challenge = crowdai.Challenge("CriteoAdPlacementNIPS2017", args.api_key)
 
-scores = challenge.submit(args.predictions)
+scores = challenge.submit(args.predictions, small_test=True)
 print(scores)
 """
 {
