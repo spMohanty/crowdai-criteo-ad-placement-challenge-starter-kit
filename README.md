@@ -3,19 +3,15 @@
 
 Starter kit for the [Criteo Ad Placement Challenge](https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge) on [CrowdAI](https://www.crowdai.org/).
 
-# About
-To-Be-Added
-
 # Installation
 
 ```
 git clone https://github.com/spMohanty/crowdai-criteo-ad-placement-challenge-starter-kit criteo_starter_kit
 pip install --upgrade crowdai
 ```
-
 **NOTE** : Please ensure that you have at least version `1.0.9` of `crowdai`
 
-# Your First Submission
+# Test your First Submission
 ```
 cd criteo_starter_kit
 virtualenv venv
@@ -28,47 +24,31 @@ pip install -r requirements.txt
 python generate_random_predictions.py --test_set=data/criteo_test_release_small.txt.gz --output_path=data/predictions.gz
 python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY> --predictions=data/predictions.gz
 ```
-# Submission Script
-```
-from __future__ import print_function
-import crowdai
-api_key  = "YOUR-CROWDAI-API-KEY"
-challenge = crowdai.Challenge("CriteoAdPlacementNIPS2017", api_key)
 
-scores = challenge.submit("predictions.gz", small_test=True)
-"""
-Arguments:
-* `small_test` : Boolean
-  ** Requests the grader to grader submission against the small test set (10000 impressions)
-  ** The computed score is not updated on the leaderboard
+# About
+Consider a display advertising scenario: a user arrives at a website where we have an advertisement slot (“an impression”). We have a pool of potential products to advertise during that impression (“a candidate set”). A “policy” chooses which product to display so as to maximize the number of clicks by the users.
 
-NOTE: In case of the actual test set, please pass `small_test=False`  
-"""
-print(scores)
+The goal of the challenge is to find a good policy that, knowing the candidate set and impression context, chooses products to display such that the aggregate click-through-rate (“CTR”) from deploying the policy is maximized.
 
-"""
-{
-  "impwt_std": 0.00064745289554913,
-  "ips_std": 2.6075584296658,
-  "snips": 6603.0581686235,
-  "max_instances": 4027,
-  "ips": 24.30130041425,
-  "impwt": 0.0036803099099937,
-  "message": "",
-  "snips_std": 17.529346134878,
-  "job_state": "CrowdAI.Event.Job.COMPLETE"
-}
-"""
-```
-The response is a python dictionary, hence the individual scoring metrics can be accessed simply by :
+To enable you to find a good policy, [Criteo](https://www.criteo.com/) has generously donated several gigabytes of `<user impression, candidate set, selected product, click/no-click>` logs from a randomized version of their in-production policy! Go to the [Dataset section](https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge/dataset_files) of the challenge to access the dataset.
 
-```
-scores['ips']
-scores['ips_std']
-scores['snips']
-scores['snips_std']
-```
-and so on.
+# Dataset
+
+In the dataset, each impression is represented by `M` lines where `M` is the number of candidate ads. Each line has feature information for every other candidate ad.
+In addition, the first line corresponds to the candidate that was displayed by the logging policy, an indicator whether the displayed product was clicked by the user ("click" encoded as `0.001`, "no-click" encoded as `0.999`), and the **inverse propensity** of the stochastic logging policy to pick that specific candidate (see the  [ companion paper ](http://www.cs.cornell.edu/~adith/Criteo/). for details).
+Each `<user context-candidate product>` pair is described using **33 categorical (multi-set) features and 2 numeric features**. Of these, 10 features are only-context-dependent while the remaining 25 features depend on both the context and the candidate product. These categorical feature representations have been post-processed to a 74000-dimensional vector with sparse one-hot encoding for each categorical feature. **The semantics behind the features will not be disclosed**.
+
+These post-processed dataset files are available [ here ](https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge/dataset_files
+).
+
+# Evaluation
+
+Your task is to build a function `f` which takes `M` candidates, each represented by a `74000-dimensional vector`, and outputs scores for each of the candidates between 1 and M.
+
+The reward for an individual impression is, did the selected candidate get clicked _(reward = 1)_ or not _(reward = 0)_? The reward for function `f` is the aggregate reward over all impressions on a held out test set of impressions.
+
+We will be using an unbiased estimate of the aggregate reward using inverse propensity scoring (see [ the companion paper ](http://www.cs.cornell.edu/~adith/Criteo/NIPS16_Benchmark.pdf) for details).
+
 
 # Parser
 
