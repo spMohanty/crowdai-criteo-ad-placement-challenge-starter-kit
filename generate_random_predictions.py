@@ -19,9 +19,13 @@ Hence in case of the training data, `isTest` should be `False`.
 
 output = gzip.open(args.output_path, "wb")
 
-for _idx, _impression in enumerate(data):
-    num_of_candidates = len(_impression["candidates"])
+def _policy(candidates):
+    num_of_candidates = len(candidates)
     predictions = np.random.rand(num_of_candidates)*10
+    return predictions
+
+for _idx, _impression in enumerate(data):
+    predictions = _policy(_impression["candidates"])
     predictions = ["{}:{}".format(idx, p) for idx, p in enumerate(predictions)]
     predictionline = "{};{}".format(_impression["id"], ",".join(predictions))
     output.write(predictionline+"\n")
