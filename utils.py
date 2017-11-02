@@ -2,6 +2,7 @@ from __future__ import print_function
 import hashlib
 import numpy as np
 import copy
+import json
 
 def extract_impression_id(line, assert_first_line=False):
     """
