@@ -25,6 +25,8 @@ python generate_random_predictions.py --test_set=data/criteo_test_release_small.
 python submit_random_predictions.py --api_key=<YOUR_CROWDAI_API_KEY> --predictions=data/predictions.gz
 ```
 
+**NOTE** : The actual test set is `criteo_test_release.txt.gz`; the example above is provided to quickly introduce the participants to the problem, and the your submissions will only appear on the leaderboard if you submit a solution for the full test set. Clarification is provided in the [dry-run-mode](#dry-run-mode) section.
+
 # About
 Consider a display advertising scenario: a user arrives at a website where we have an advertisement slot (“an impression”). We have a pool of potential products to advertise during that impression (“a candidate set”). A “policy” chooses which product to display so as to maximize the number of clicks by the users.
 
@@ -95,8 +97,9 @@ The grader only accepts gzipped version of the prediction file (even if the pars
 
 As the Test set is large, and the computation of the score takes a considerable amount of time, we have also provided smaller versions of the train and test sets for the participants to verify the grading pipeline.
 The files can be downloaded in the [datasets section](https://www.crowdai.org/challenges/nips-17-workshop-criteo-ad-placement-challenge/dataset_files) of the challenge page. And when submitting a solution, it can be submitted by passing the `small_test=True` parameter to `challenge.submit` function, as done in the [provided sample scripts](submit_random_predictions.py).
-
 These scores from these submissions (with `small_test=True`) will not be reflected on the leaderboard.
+
+If you wish to make a submission against the full test set, then you will have to submit with `small_test=False`, as described here : https://github.com/crowdAI/crowdai-criteo-ad-placement-challenge-starter-kit/blob/master/submit_random_predictions.py#L19
 
 # Contact:
 * Technical issues : [https://gitter.im/crowdAI/NIPS17-Criteo-Ad-Placement-Challenge](https://gitter.im/crowdAI/NIPS17-Criteo-Ad-Placement-Challenge)
