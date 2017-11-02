@@ -2,7 +2,6 @@ from __future__ import print_function
 import hashlib
 import numpy as np
 import copy
-import json
 
 def extract_impression_id(line, assert_first_line=False):
     """
@@ -75,14 +74,3 @@ def compute_integral_hash(S, salt, modulo):
     md5 = hashlib.md5(S).hexdigest()
     _ords = [ord(c) for c in md5]
     return (sum(_ords)**7) % modulo
-
-def update_progress(context, percent_complete, message=""):
-        """
-            Internal function for relaying back the scores to the client
-        """
-        #Register Progress
-        _progress_update = {}
-        _progress_update["percent_complete"] = percent_complete
-        _progress_update["message"] = message
-        _progress_update["data_sequence_no"] = context["data_sequence_no"]
-        context['redis_conn'].rpush(context['response_channel'], json.dumps(job_progress_update(context, _progress_update, _progress_update["message"])))

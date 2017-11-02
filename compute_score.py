@@ -7,7 +7,7 @@ from criteo_prediction import CriteoPrediction
 import numpy as np
 import utils
 
-def grade_predictions(predictions_path, gold_labels_path, expected_number_of_predictions=False, force_gzip=False, _context=False, salt_swap=False, _debug = False):
+def grade_predictions(predictions_path, gold_labels_path, expected_number_of_predictions=False, force_gzip=False, _context=False, salt_swap=False, jobfactory_utils=False, _debug = False):
     gold_data = CriteoDataset(gold_labels_path, isGzip=force_gzip)
     predictions = CriteoPrediction(predictions_path, isGzip=force_gzip)
 
@@ -82,8 +82,8 @@ def grade_predictions(predictions_path, gold_labels_path, expected_number_of_pre
 
         impression_counter += 1 #Adding this as _idx is not available out of this scope
         if _idx % 100 == 0:
-            if _context:
-                utils.update_progress(_context, _idx*100.0/max_instances)
+            if _context and jobfactory_utils:
+                jobfactory_utils.update_progress(_context, _idx*100.0/max_instances)
             if _debug: print('.', end='')
 
     gold_data.close()
