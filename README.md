@@ -67,7 +67,7 @@ for _idx, _impression in enumerate(data):
 
 ```
 
-The reward for an individual impression is, did the selected candidate get clicked _(reward = 1)_ or not _(reward = 0)_? The reward for function `f` is the aggregate reward over all impressions on a held out test set of impressions.
+The reward for an individual impression is, did the selected candidate get clicked _(reward = 1)_ or not _(reward = 0)_? The reward for function `_policy` is the aggregate reward over all impressions on a held out test set of impressions.
 
 We will be using an unbiased estimate of the aggregate reward using inverse propensity scoring (see [ the companion paper ](http://www.cs.cornell.edu/~adith/Criteo/NIPS16_Benchmark.pdf) for details).
 
