@@ -13,7 +13,7 @@ git clone https://github.com/spMohanty/crowdai-criteo-ad-placement-challenge-sta
 pip install --upgrade crowdai
 ```
 
-**NOTE** : Please ensure that you have at least version `1.0.8` of `crowdai`
+**NOTE** : Please ensure that you have at least version `1.0.9` of `crowdai`
 
 # Your First Submission
 ```
