@@ -43,9 +43,27 @@ These post-processed dataset files are available [ here ](https://www.crowdai.or
 
 We have provided a simple parser for the dataset in this starter kit. A simple example can be found here in [parser_example.py](parser_example.py)
 
-# Evaluation
 
-Your task is to build a function `f` which takes `M` candidates, each represented by a `74000-dimensional vector`, and outputs scores for each of the candidates between 1 and M.
+# Task & Evaluation
+
+Your task is to build a function `_policy` which takes `M` candidates, each represented by a `74000-dimensional vector`, and outputs scores for each of the candidates between 1 and M.
+
+```
+data = CriteoDataset("PATH_TO_TEST_SET", isTest=True)
+
+def _policy(candidates):
+    num_of_candidates = len(candidates)
+    predictions = np.random.rand(num_of_candidates)*10
+    return predictions
+
+for _idx, _impression in enumerate(data):
+    predictions = _policy(_impression["candidates"])
+    predictionline = _format_predictions(predictions)
+    output.write(predictionline+"\n")
+    if _idx % 500 == 0:
+        print("Processed {} impressions...".format(_idx))
+
+```
 
 The reward for an individual impression is, did the selected candidate get clicked _(reward = 1)_ or not _(reward = 0)_? The reward for function `f` is the aggregate reward over all impressions on a held out test set of impressions.
 
