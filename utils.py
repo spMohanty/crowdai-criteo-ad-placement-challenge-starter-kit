@@ -7,6 +7,8 @@ def extract_impression_id(line, assert_first_line=False):
     """
         Extracts the impression_id from a line
     """
+    if type(line) == bytes:
+        line = line.decode()
     return line[:line.index("|")].strip()
 
 def extract_cost_propensity(line):
@@ -18,6 +20,8 @@ def extract_cost_propensity(line):
         line: `string`
 
     """
+    if type(line) == bytes:
+        line = line.decode()
     line_items = line.split("|")
     assert len(line_items) == 4
     cost = float(line_items[1].replace("l ","").strip())
@@ -27,6 +31,8 @@ def extract_cost_propensity(line):
     return cost, propensity
 
 def extract_features(line, debug=False):
+    if type(line) == bytes:
+        line = line.decode()
     features_index = line.index("|f ")
     feature_string = line[features_index:].replace("|f ","")
     feature_set = feature_string.split()
