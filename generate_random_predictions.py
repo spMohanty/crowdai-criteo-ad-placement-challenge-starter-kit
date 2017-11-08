@@ -32,7 +32,7 @@ def _policy(candidates):
 for _idx, _impression in enumerate(data):
     predictions = _policy(_impression["candidates"])
     predictionline = _format_predictions(predictions)
-    predictionline + "\n"
+    predictionline += "\n"
     predictionline = predictionline.encode() #Note this is important for python3 compatibility as we are writing in "wb" mode
     output.write(predictionline)
 
