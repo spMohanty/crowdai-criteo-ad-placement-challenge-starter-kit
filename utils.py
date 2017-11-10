@@ -56,7 +56,7 @@ def dump_feature(feature):
         s += "{}:{} ".format(_key, feature[_key])
     return s
 
-def dump_impression(_impression, test_mode=False, debug=False):
+def dump_impression(_impression, test_mode=False, inverse_propensity=True, debug=False):
     """
         Expects an impression block, and renders it out in the CNTK format
     """
@@ -69,6 +69,8 @@ def dump_impression(_impression, test_mode=False, debug=False):
         _line = (impression_id.strip("L"))+" "
         if not test_mode and has_cost and has_propensity and _idx==0:
             _line += "|l {} ".format(_impression['cost'])
+            if inverse_propensity:
+                _impression["propensity"] = 1.0/_impression["propensity"]
             _line += "|p {}".format(_impression["propensity"])
 
         _line += dump_feature(candidate)
