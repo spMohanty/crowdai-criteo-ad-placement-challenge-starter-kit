@@ -11,14 +11,14 @@ def extract_impression_id(line, assert_first_line=False):
         line = line.decode()
     return line[:line.index("|")].strip()
 
-def extract_cost_propensity(line):
+def extract_cost_propensity(line, inverse_propensity=True):
     """
         Extracts the cost, propensity value from a line.
         Only the first line in an impression block.
 
         params:
         line: `string`
-
+        inverse_propensity: `boolean`
     """
     if type(line) == bytes:
         line = line.decode()
@@ -27,7 +27,9 @@ def extract_cost_propensity(line):
     cost = float(line_items[1].replace("l ","").strip())
     #NOTE That the value after |p in the line is actually inverse propensity
     # Hence, the need for the division by 1
-    propensity = 1.0/np.float64(line_items[2].replace("p ","").strip())
+    propensity = np.float64(line_items[2].replace("p ","").strip())
+    if inverse_propensity:
+        propensity = 1.0/propensity
     return cost, propensity
 
 def extract_features(line, debug=False):
