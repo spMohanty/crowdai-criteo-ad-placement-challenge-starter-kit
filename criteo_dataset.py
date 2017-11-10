@@ -5,11 +5,12 @@ import hashlib
 import gzip
 
 class CriteoDataset:
-    def __init__(self, filepath, isTest=False, isGzip=False, id_map=False, debug=False):
+    def __init__(self, filepath, isTest=False, isGzip=False, id_map=False, inverse_propensity=True, debug=False):
         if filepath.endswith(".gz") or isGzip:
             self.fp = gzip.open(filepath, "rb")
         else:
             self.fp = open(filepath, "rb")
+        self.inverse_propensity = inverse_propensity
         self.debug = debug
         self.isTest = isTest
         """
@@ -62,7 +63,7 @@ class CriteoDataset:
             block_impression_id = self.id_map(block_impression_id)
 
         if not self.isTest:
-            cost, propensity = utils.extract_cost_propensity(line)
+            cost, propensity = utils.extract_cost_propensity(line, inverse_propensity=self.inverse_propensity)
 
         candidate_features = [utils.extract_features(line, self.debug)]
 
